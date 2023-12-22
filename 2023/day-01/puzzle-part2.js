@@ -1,16 +1,16 @@
 const { open } = require("node:fs/promises");
 
-const numbersAsStrings = {
-  one: 1,
-  two: 2,
-  three: 3,
-  four: 4,
-  five: 5,
-  six: 6,
-  seven: 7,
-  eight: 8,
-  nine: 9,
-};
+const numbersAsStrings = [
+  { string: "one", number: 1 },
+  { string: "two", number: 2 },
+  { string: "three", number: 3 },
+  { string: "four", number: 4 },
+  { string: "five", number: 5 },
+  { string: "six", number: 6 },
+  { string: "seven", number: 7 },
+  { string: "eight", number: 8 },
+  { string: "nine", number: 9 },
+];
 
 /**
  * This function finds the first digit in a string.
@@ -26,7 +26,7 @@ function findFirstDigit(puzzleLineString) {
   return firstDigit;
 }
 
-/** 
+/**
  * This function finds the second digit in a string.
  * @param {string} puzzleLineString
  * @returns {string}
@@ -52,8 +52,21 @@ function combineNumbersToString(firstDigit, secondDigit) {
   return combinedNumber;
 }
 
-function replaceStringsWithNumbers(arrayOfNumbersAsStrings, puzzleLineString) {
+/**
+ * This function replaces all strings with numbers.
+ * @param {string} puzzleLineString
+ * @param {object[]} numbersAsStringsArray
+ * */
+function replaceStringsWithNumbers(puzzleLineString, numbersAsStringsArray) {
+  let newString = puzzleLineString;
 
+  // numbersAsStringsArray.forEach((number) => {
+  //   if (puzzleLineString.includes(number.string)) {
+  //     newString = newString.replaceAll(number.string, number.number);
+  //   }
+  // });
+
+  return newString;
 }
 
 /**
@@ -62,12 +75,20 @@ function replaceStringsWithNumbers(arrayOfNumbersAsStrings, puzzleLineString) {
  * @param {string[]} inputArr
  * @returns {number}
  * */
-function parseCombinedNumbers(inputArr) {
+function parseCombinedNumbers(inputArr, numbersAsStringsArray) {
   let totalSum = 0;
 
   inputArr.forEach((puzzleLine) => {
-    const firstDigit = findFirstDigit(puzzleLine);
-    const secondDigit = findSecondDigit(puzzleLine);
+    const puzzleLineWithStringsReplaced = replaceStringsWithNumbers(
+      puzzleLine,
+      numbersAsStringsArray
+    );
+
+    console.log("PuzzleLine: " + puzzleLine);
+    console.log("PusslelineReplace: " + puzzleLineWithStringsReplaced);
+
+    const firstDigit = findFirstDigit(puzzleLineWithStringsReplaced);
+    const secondDigit = findSecondDigit(puzzleLineWithStringsReplaced);
     const combinedNumber = combineNumbersToString(firstDigit, secondDigit);
 
     totalSum += parseInt(combinedNumber);
@@ -89,7 +110,7 @@ async function readFile() {
 
 readFile()
   .then((stringArray) => {
-    const sumOfNumbers = parseCombinedNumbers(stringArray);
+    const sumOfNumbers = parseCombinedNumbers(stringArray, numbersAsStrings);
 
     console.log("The sum is: " + sumOfNumbers);
   })
