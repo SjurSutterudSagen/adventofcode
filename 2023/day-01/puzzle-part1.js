@@ -1,58 +1,22 @@
-const { open } = require("node:fs/promises");
+import { readFile } from "./utils/read-file.js";
+import { numbersAsStrings } from "./data/numbers-as-strings.js";
+import { parseCombinedNumbers } from "./utils/parse-digits.js";
+import { checkIfAnswerIsWrong } from "./utils/check-if-answer-is-wrong.js";
 
-function findFirstDigit(puzzleLineString) {
-  const firstDigit = puzzleLineString
-    .toString()
-    .split("")
-    .find((char) => !isNaN(parseInt(char)));
+const puzzleInputFilePath = "./data/puzzle-input.txt";
 
-  return firstDigit;
-}
+readFile(puzzleInputFilePath)
+  .then((stringArray) => {
+    const sumOfNumbers = parseCombinedNumbers(stringArray, numbersAsStrings, false);
+    const isAnswerWrong = checkIfAnswerIsWrong(sumOfNumbers, 1);
 
-function findSecondDigit(puzzleLineString) {
-  const secondDigit = puzzleLineString
-    .toString()
-    .split("")
-    .findLast((char) => !isNaN(parseInt(char)));
+    if (isAnswerWrong === true) {
+      console.log("The answer is wrong!");
+    }
 
-  return secondDigit;
-}
-
-function combineNumbersToString(firstDigit, secondDigit) {
-  const combinedNumber = firstDigit.toString() + secondDigit.toString();
-
-  return combinedNumber;
-}
-
-function parseCombinedNumbers(inputArr) {
-  let totalSum = 0;
-
-  inputArr.forEach((puzzleLine) => {
-    const firstDigit = findFirstDigit(puzzleLine);
-    const secondDigit = findSecondDigit(puzzleLine);
-    const combinedNumber = combineNumbersToString(firstDigit, secondDigit);
-
-    totalSum += parseInt(combinedNumber);
+    console.log("The sum is: " + sumOfNumbers);
+    
+  })
+  .catch((err) => {
+    console.log(err);
   });
-
-  return totalSum;
-}
-
-async function readFile() {
-  const file = await open("puzzle-input.txt");
-  let inputArray = [];
-
-  for await (const line of file.readLines()) {
-    inputArray.push(line.toString());
-  }
-
-  return inputArray;
-}
-
-readFile().then((stringArray) => {
-  const sumOfNumbers = parseCombinedNumbers(stringArray);
-
-  console.log("The sum is: " + sumOfNumbers);
-}).catch((err) => {
-  console.log(err);
-});
