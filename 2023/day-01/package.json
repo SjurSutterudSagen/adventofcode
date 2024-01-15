@@ -1,5 +1,5 @@
 {
-  "name": "day-01",
+  "name": "2023-day-01",
   "version": "1.0.0",
   "description": "Advent of Code Day 1 Puzzle",
   "main": "puzzle-part2.js",
