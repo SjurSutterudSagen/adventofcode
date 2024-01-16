@@ -20,12 +20,15 @@ export default function puzzleDay02(filePath: string): void {
   readFile(filePath).then((games) => {
     parsedGames = parseInput(games);
 
-    const sumOfValidGameIds = checkInput(
+    const parsedResponse = checkInput(
       parsedGames,
       puzzleDay02Pt1MaxColorAmounts
     );
 
-    console.log("sum of valid game ids: ", sumOfValidGameIds);
+    const sumOfValidGameIds = parsedResponse[0];
+    const cubePower = parsedResponse[1];
+
+    console.log(`Sum of valid game ids: ${sumOfValidGameIds} and cubePower: ${cubePower}`);
   });
 }
 
